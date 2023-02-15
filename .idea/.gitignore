@@ -1,0 +1,8 @@
+# 默认忽略的文件
+/shelf/
+/workspace.xml
+# 数据源本地存储已忽略文件
+/../../../../../../../../../../:\艾尔登\111111\1 瑞吉外卖项目 2\1 瑞吉外卖项目\代码\day06\reggie_take_out\reggie_take_out\.idea/dataSources/
+/dataSources.local.xml
+# 基于编辑器的 HTTP 客户端请求
+/httpRequests/
