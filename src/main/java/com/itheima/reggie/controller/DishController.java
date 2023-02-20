@@ -253,6 +253,8 @@ public class DishController {
         for (String id:ids){
             dishService.removeById(id);
         }
+        Set keys = redisTemplate.keys("dish_*");
+        redisTemplate.delete(keys);
         return  R.success("菜品删除成功");
     }
     //停售，起售
@@ -264,6 +266,8 @@ public class DishController {
             dish.setStatus(status);
             dishService.updateById(dish);
         }
+        Set keys = redisTemplate.keys("dish_*");
+        redisTemplate.delete(keys);
         return R.success("修改成功");
     }
 }
