@@ -14,6 +14,9 @@ import com.itheima.reggie.service.DishService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +35,8 @@ import java.util.stream.Collectors;
 public class DishController {
     @Autowired
     private DishService dishService;
+    @Autowired
+    private CacheManager cacheManager;
 
     @Autowired
     private DishFlavorService dishFlavorService;
@@ -46,14 +51,12 @@ public class DishController {
      * @param dishDto
      * @return
      */
+    @CacheEvict(value = "dishCache",allEntries = true)
     @PostMapping
     public R<String> save(@RequestBody DishDto dishDto){
         log.info(dishDto.toString());
 
         dishService.saveWithFlavor(dishDto);
-
-        Set keys = redisTemplate.keys("dish_*");
-        redisTemplate.delete(keys);
 
         return R.success("新增菜品成功");
     }
@@ -258,6 +261,7 @@ public class DishController {
         return  R.success("菜品删除成功");
     }
     //停售，起售
+
     @PostMapping("/status/{status}")
     public R<String> sale(@PathVariable int status,
                           String[] ids){
